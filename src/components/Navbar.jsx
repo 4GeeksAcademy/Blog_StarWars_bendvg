@@ -1,19 +1,54 @@
 import { Link } from "react-router-dom";
+import { useAppContext } from "../AppContext";
 
 export const Navbar = () => {
+  const { state, dispatch } = useAppContext();
 
-	return (
-		<nav className="navbar navbar-light bg-light">
-			<div className="container">
-				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
-				</Link>
-				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
-					</Link>
-				</div>
-			</div>
-		</nav>
-	);
+  return (
+    <nav className="navbar navbar-dark bg-dark px-3">
+      <Link to="/" className="navbar-brand">
+        StarWars Blog
+      </Link>
+
+      <div className="dropdown">
+        <button
+          className="btn btn-warning dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Favorites ({state.favorites.length})
+        </button>
+
+        <ul className="dropdown-menu dropdown-menu-end">
+          {state.favorites.length === 0 && (
+            <li className="dropdown-item text-muted">No favorites yet</li>
+          )}
+
+          {state.favorites.map((item) => (
+            <li
+              key={`${item.type}-${item.id}`}
+              className="dropdown-item d-flex justify-content-between align-items-center"
+            >
+              <Link
+                to={`/single/${item.type}/${item.id}`}
+                className="text-decoration-none"
+              >
+                {item.name}
+              </Link>
+
+              <button
+                className="btn btn-sm btn-danger ms-2"
+                onClick={() =>
+                  dispatch({ type: "REMOVE_FAVORITE", payload: item.id })
+                }
+              >
+                ❌
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+  );
 };
