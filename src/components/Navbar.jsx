@@ -43,9 +43,10 @@ export const Navbar = () => {
 
               <button
                 className="btn btn-sm btn-dark ms-2"
-                onClick={() =>
+                onClick={(e) =>{
+                  e.stopPropagation();
                   dispatch({ type: "REMOVE_FAVORITE", payload: item.id })
-                }
+                }}
               >
                 <i className="fa-solid fa-trash" style={{ color: "#FFD43B" }}></i>
               </button>

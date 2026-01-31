@@ -2,20 +2,47 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useAppContext } from "../AppContext";
 
+const fetchWithTimeout = (url, ms = 8000) =>
+  Promise.race([
+    fetch(url),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Timeout")), ms)
+    )
+  ]);
+
 export const Single = () => {
   const { type, id } = useParams();
   const { dispatch } = useAppContext();
   const [data, setData] = useState(null);
+  const [error, setError] = useState(false);
 
   const loadItem = async () => {
-    const res = await fetch(`https://www.swapi.tech/api/${type}/${id}`);
-    const json = await res.json();
-    setData(json.result);
+    try {
+      const res = await fetchWithTimeout(
+        `https://www.swapi.tech/api/${type}/${id}`
+      );
+      const json = await res.json();
+      setData(json.result);
+    } catch (err) {
+      console.error("Error cargando item:", err);
+      setError(true);
+    }
   };
 
   useEffect(() => {
     loadItem();
   }, [type, id]);
+
+  if (error) {
+    return (
+      <div className="container text-center mt-5">
+        <h2 className="text-danger">Error loading data</h2>
+        <Link to="/" className="btn btn-warning mt-3">
+          Back home
+        </Link>
+      </div>
+    );
+  }
 
   if (!data) {
     return (
@@ -33,8 +60,7 @@ export const Single = () => {
     starships: `https://raw.githubusercontent.com/dsmora/star-wars-guide/refs/heads/master/build/assets/img/starships/${id}.jpg`
   }[type];
 
-  const fallback =
-    "https://pbs.twimg.com/media/CqAE488UAAAeoX7.jpg";
+  const fallback = "https://pbs.twimg.com/media/CqAE488UAAAeoX7.jpg";
 
   return (
     <div className="container mt-5">
@@ -65,7 +91,7 @@ export const Single = () => {
               ❤️ Add to favorites
             </button>
 
-            <Link to="/" className="btn btn-primary">
+            <Link to="/" className="btn btn-dark">
               Back home
             </Link>
           </div>
@@ -78,7 +104,17 @@ export const Single = () => {
         {Object.entries(properties).map(([key, value]) => (
           <div key={key} className="col-md-3 mb-3">
             <h6 className="text-warning text-uppercase">{key}</h6>
-            <p>{value}</p>
+
+            {key === "films" && Array.isArray(value) ? (
+              <p>
+                {value.map((url) => {
+                  const filmId = url.split("/").pop();
+                  return <span key={filmId}>Episode {filmId} </span>;
+                })}
+              </p>
+            ) : (
+              <p>{value}</p>
+            )}
           </div>
         ))}
       </div>

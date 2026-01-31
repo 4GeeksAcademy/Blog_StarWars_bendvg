@@ -2,31 +2,50 @@ import { useEffect } from "react";
 import { useAppContext } from "../AppContext";
 import { Card } from "../components/card";
 
+const fetchWithTimeout = (url, ms = 8000) =>
+  Promise.race([
+    fetch(url),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Timeout")), ms)
+    )
+  ]);
+
 export const Home = () => {
   const { state, dispatch } = useAppContext();
 
-  const loadPeople = async () => {
-    const res = await fetch("https://www.swapi.tech/api/people");
-    const data = await res.json();
-    dispatch({ type: "SET_PEOPLE", payload: data.results });
-  };
-
-  const loadPlanets = async () => {
-    const res = await fetch("https://www.swapi.tech/api/planets");
-    const data = await res.json();
-    dispatch({ type: "SET_PLANETS", payload: data.results });
-  };
-
-  const loadStarships = async () => {
-    const res = await fetch("https://www.swapi.tech/api/starships");
-    const data = await res.json();
-    dispatch({ type: "SET_STARSHIPS", payload: data.results });
-  };
-
   useEffect(() => {
-    loadPeople();
-    loadPlanets();
-    loadStarships();
+    const loadAll = async () => {
+      try {
+        // Evita recargar si ya tenemos datos
+        if (
+          state.people.length > 0 &&
+          state.planets.length > 0 &&
+          state.starships.length > 0
+        ) {
+          return;
+        }
+
+        const [peopleRes, planetsRes, starshipsRes] = await Promise.all([
+          fetchWithTimeout("https://www.swapi.tech/api/people"),
+          fetchWithTimeout("https://www.swapi.tech/api/planets"),
+          fetchWithTimeout("https://www.swapi.tech/api/starships")
+        ]);
+
+        const [people, planets, starships] = await Promise.all([
+          peopleRes.json(),
+          planetsRes.json(),
+          starshipsRes.json()
+        ]);
+
+        dispatch({ type: "SET_PEOPLE", payload: people.results });
+        dispatch({ type: "SET_PLANETS", payload: planets.results });
+        dispatch({ type: "SET_STARSHIPS", payload: starships.results });
+      } catch (err) {
+        console.error("Error cargando datos:", err);
+      }
+    };
+
+    loadAll();
   }, []);
 
   return (
