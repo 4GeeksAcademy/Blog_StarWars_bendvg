@@ -1,4 +1,50 @@
 body {
-  background-color: #212529;
+  background-color: #000000;
+  color: white;
+}
+
+.custom-navbar {
+  background-color: #000000;
+}
+
+.navbar-logo {
+  margin-left: 20px;
+  height: 70px;
+  object-fit: contain;
+}
+
+.dropdown-menu .dropdown-item > a {
+  color: #000000;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.dropdown-menu .dropdown-item > a:hover {
+  color: #000000;
+  font-weight: 700;
+}
+
+.cards-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 20px 10px;
+}
+
+.cards-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.cards-container::-webkit-scrollbar-thumb {
+  background: #FFD43B;
+  border-radius: 4px;
+}
+
+.custom-card {
+  min-width: 200px;
+  max-width: 200px;
+  background-color: #111;
+  border: 1px solid #333;
+  border-radius: 8px;
   color: white;
 }

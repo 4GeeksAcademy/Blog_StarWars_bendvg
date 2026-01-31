@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 
 export const Card = ({ id, name, type, imageUrl, onFavorite }) => {
-  const fallback =
-    "https://pbs.twimg.com/media/CqAE488UAAAeoX7.jpg";
+  const fallback = "https://pbs.twimg.com/media/CqAE488UAAAeoX7.jpg";
 
   return (
-    <div className="card m-2" style={{ width: "18rem" }}>
+    <div className="card custom-card">
       <img
         src={imageUrl}
         onError={(e) => (e.target.src = fallback)}
@@ -17,7 +16,7 @@ export const Card = ({ id, name, type, imageUrl, onFavorite }) => {
         <h5 className="card-title">{name}</h5>
 
         <div className="d-flex justify-content-between">
-          <Link to={`/single/${type}/${id}`} className="btn btn-primary">
+          <Link to={`/single/${type}/${id}`} className="btn btn-dark">
             Learn more
           </Link>
 

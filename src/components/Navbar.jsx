@@ -5,9 +5,13 @@ export const Navbar = () => {
   const { state, dispatch } = useAppContext();
 
   return (
-    <nav className="navbar navbar-dark bg-dark px-3">
+    <nav className="navbar custom-navbar px-3">
       <Link to="/" className="navbar-brand">
-        StarWars Blog
+        <img
+          src="https://framerusercontent.com/images/HVzApGKkH6YM1vUO9zOo5lJBC4.jpeg?width=930&height=523"
+          alt="Star Wars Logo"
+          className="navbar-logo"
+        />
       </Link>
 
       <div className="dropdown">
@@ -38,12 +42,12 @@ export const Navbar = () => {
               </Link>
 
               <button
-                className="btn btn-sm btn-danger ms-2"
+                className="btn btn-sm btn-dark ms-2"
                 onClick={() =>
                   dispatch({ type: "REMOVE_FAVORITE", payload: item.id })
                 }
               >
-                ❌
+                <i className="fa-solid fa-trash" style={{ color: "#FFD43B" }}></i>
               </button>
             </li>
           ))}

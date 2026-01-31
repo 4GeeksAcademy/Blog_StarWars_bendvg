@@ -32,7 +32,7 @@ export const Home = () => {
   return (
     <div className="container mt-4">
       <h2 className="text-warning">Characters</h2>
-      <div className="d-flex overflow-auto">
+      <div className="cards-container">
         {state.people.map((item) => (
           <Card
             key={item.uid}
@@ -51,7 +51,7 @@ export const Home = () => {
       </div>
 
       <h2 className="text-warning mt-4">Planets</h2>
-      <div className="d-flex overflow-auto">
+      <div className="cards-container">
         {state.planets.map((item) => (
           <Card
             key={item.uid}
@@ -70,7 +70,7 @@ export const Home = () => {
       </div>
 
       <h2 className="text-warning mt-4">Starships</h2>
-      <div className="d-flex overflow-auto">
+      <div className="cards-container">
         {state.starships.map((item) => (
           <Card
             key={item.uid}
