@@ -16,7 +16,7 @@ export const Home = () => {
   useEffect(() => {
     const loadAll = async () => {
       try {
-        // Evita recargar si ya tenemos datos
+        
         if (
           state.people.length > 0 &&
           state.planets.length > 0 &&

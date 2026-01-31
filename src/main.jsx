@@ -4,7 +4,7 @@ import './index.css'
 import { RouterProvider } from "react-router-dom"
 import { router } from "./routes"
 
-// Importa tu nuevo estado global
+
 import { AppProvider } from "./AppContext"
 
 const Main = () => {
